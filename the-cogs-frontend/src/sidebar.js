@@ -16,7 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 
 const drawerWidth = "30%";
 
-export default function PermanentDrawerRight() {
+export default function PermanentDrawerRight(props) {
   return (
     <Drawer
       variant="permanent"
@@ -30,13 +30,10 @@ export default function PermanentDrawerRight() {
       <Toolbar />
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {props.result.map((text, index) => (
+          <ListItem key={text.$oid} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text.status} />
             </ListItemButton>
           </ListItem>
         ))}

@@ -5,7 +5,7 @@ import "./App.css";
 
 import PrimarySearchAppBar from "./Appbar";
 import PermanentDrawerRight from "./sidebar";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 
 class App extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
-    fetch("http://192.168.0.121:5001/get-data")
+    fetch("http://localhost:5001/get-data")
       .then((res) => res.json())
       .then((json) => {
         this.setState(
@@ -41,9 +41,9 @@ class App extends React.Component {
 
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             {this.state.dataIsLoaded ? (
-              <PermanentDrawerRight />
+              <PermanentDrawerRight {...this.state.nodes} />
             ) : (
-              <h1> Loading </h1>
+              <CircularProgress />
             )}
           </Box>
         </Box>
