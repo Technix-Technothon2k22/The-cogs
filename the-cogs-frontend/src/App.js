@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 
 import PrimarySearchAppBar from "./Appbar";
+import PermanentDrawerRight from "./sidebar";
 
 function App() {
   return (

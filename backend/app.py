@@ -1,16 +1,19 @@
 from crypt import methods
-from flask import Flask, request, jsonify
+from sqlite3 import Cursor
+from typing import Collection
+from flask import Flask, request, jsonify, json
+from pymongo import MongoClient
+from bson import json_util
+
+
+client = MongoClient(
+    "mongodb+srv://amit:YA1dZkURFHFbrY2r@cluster0.3ahw9wr.mongodb.net/?retryWrites=true&w=majority")
+
+database = client.elecnodes
+collection = database.nodes
+cursor = collection.find()
 
 app = Flask(__name__)
-
-dummy_data = [
-    {"location": {"lat": 45.2131, "long": 46.4234},
-        "status": "online", "volt": 220, "phase": 3},
-    {"location": {"lat": 45.2131, "long": 46.4234},
-        "status": "online", "volt": 220, "phase": 3},
-    {"location": {"lat": 45.2131, "long": 46.4234},
-        "status": "online", "volt": 220, "phase": 3}
-]
 
 
 @app.route("/", methods=["GET"])
@@ -22,7 +25,12 @@ def home():
 @app.route("/get-data", methods=["GET"])
 def getData():
     if request.method == "GET":
-        return jsonify({"result": dummy_data}), 200
+        data = []
+        for doc in cursor:
+            data.append(doc)
+
+        data = json.loads(json_util.dumps(data))
+        return jsonify({"result": data}), 200
 
 
 if __name__ == "__main__":
