@@ -14,6 +14,8 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Grid from '@mui/material/Grid'
+import { Button } from "@mui/material";
 
 const drawerWidth = "30%";
 
@@ -48,9 +50,15 @@ export default function PermanentDrawerRight(props) {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
+                    <Grid container>
+                    <Grid item xs={11}>
                     <Typography color={selectColor(text.status)}>
                       {text.status}
                     </Typography>
+                    </Grid>
+                    <Grid item xs={1}>
+                    </Grid>
+                    </Grid>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography color={selectColor(text.status)}>
@@ -59,6 +67,8 @@ export default function PermanentDrawerRight(props) {
                       <br />
                       Co-ordinates = {text.location.lat} N, {text.location.long}{" "}
                       E
+                      <br/>
+                      <Button variant="contained" color="warning">Repair</Button>
                     </Typography>
                   </AccordionDetails>
                 </Accordion>
