@@ -15,10 +15,65 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import AddIcon from "@mui/icons-material/Add";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { ConstructionTwoTone } from "@mui/icons-material";
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [formValues, setFormValues] = React.useState({
+    location: "",
+    longitude: 0,
+    latitude: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log(
+      JSON.stringify({
+        location: { lat: formValues.latitude, long: formValues.longitude },
+      })
+    );
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({
+        location: { lat: formValues.latitude, long: formValues.longitude },
+      }),
+    };
+    fetch("http://localhost:5001/add-node", requestOptions).then((res) =>
+      console.log(res)
+    );
+    handleClose();
+  };
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -140,11 +195,68 @@ export default function PrimarySearchAppBar() {
           </Search> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton> */}
+            <IconButton
+              size="large"
+              aria-label="add new node"
+              color="inherit"
+              onClick={handleClickOpen}
+            >
+              <AddIcon />
+            </IconButton>
+            <div>
+              <Button variant="outlined" onClick={handleClickOpen}>
+                Open form dialog
+              </Button>
+              <Dialog open={open} onClose={handleClose}>
+                <form onSubmit={handleSubmit}>
+                  <DialogTitle>Subscribe</DialogTitle>
+
+                  <DialogContent>
+                    <DialogContentText>
+                      Enter details about the new node.
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="location"
+                      name="location"
+                      label="Locality"
+                      type="text"
+                      fullWidth
+                      variant="standard"
+                      onChange={handleInputChange}
+                    />
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="latitude"
+                      name="latitude"
+                      label="Latitude"
+                      type="text"
+                      fullWidth
+                      variant="standard"
+                      onChange={handleInputChange}
+                    />
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="longitude"
+                      label="Longitude"
+                      type="text"
+                      name="longitude"
+                      fullWidth
+                      variant="standard"
+                      onChange={handleInputChange}
+                    />
+                  </DialogContent>
+
+                  <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button type="submit">Subscribe</Button>
+                  </DialogActions>
+                </form>
+              </Dialog>
+            </div>
             {/* <IconButton
               size="large"
               aria-label="show 17 new notifications"
@@ -166,22 +278,8 @@ export default function PrimarySearchAppBar() {
               <AccountCircle />
             </IconButton> */}
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
 }
