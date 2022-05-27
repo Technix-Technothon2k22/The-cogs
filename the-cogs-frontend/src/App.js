@@ -3,6 +3,8 @@ import "./App.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 import PrimarySearchAppBar from "./Appbar";
+import PermanentDrawerRight from "./sidebar";
+
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
       </MapContainer>
+      <PermanentDrawerRight/>
     </div>
   );
 }
