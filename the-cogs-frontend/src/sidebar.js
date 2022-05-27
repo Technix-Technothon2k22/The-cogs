@@ -1,8 +1,5 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
@@ -13,8 +10,18 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const drawerWidth = "30%";
+
+const selectColor = (status) => {
+  if (status === "online") return "green";
+  else if (status === "repair") return "#b28704";
+  else return "red";
+};
 
 export default function PermanentDrawerRight(props) {
   return (
@@ -35,7 +42,26 @@ export default function PermanentDrawerRight(props) {
           .map((text, index) => (
             <ListItem key={text.$oid} disablePadding>
               <ListItemButton>
-                <ListItemText primary={text.status} />
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography color={selectColor(text.status)}>
+                      {text.status}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography color={selectColor(text.status)}>
+                      Voltage = {text.volt}V<br />
+                      Phase = {text.phase}
+                      <br />
+                      Co-ordinates = {text.location.lat} N, {text.location.long}{" "}
+                      E
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
               </ListItemButton>
             </ListItem>
           ))}
