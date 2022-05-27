@@ -1,9 +1,11 @@
 import logo from './logo.svg';
+import PrimarySearchAppBar from './Appbar';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
+       <PrimarySearchAppBar></PrimarySearchAppBar>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -18,6 +20,7 @@ function App() {
           Learn React
         </a>
       </header>
+     
     </div>
   );
 }
