@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 import logo from "./logo.svg";
 import "./App.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 import PrimarySearchAppBar from "./Appbar";
+=======
+import logo from './logo.svg';
+import PrimarySearchAppBar from './Appbar';
+import './App.css';
+>>>>>>> 7e285ce4983ec3378405a09c39df7076caee903a
 
 function App() {
   return (
