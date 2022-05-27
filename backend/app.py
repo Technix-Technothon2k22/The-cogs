@@ -28,9 +28,16 @@ def getData():
         data = json.loads(json_util.dumps(data))
         return jsonify({"result": data}), 200
 
-# @app.route("/add-node", methods=["PUT"])
-# def addNode():
-#   if request.method == "PUT":
+@app.route("/add-node", methods=["POST"])
+def addNode():
+  if request.method == "POST":
+      data = request.get_json()
+      
+      collection.insert_one(data)
+
+      return jsonify("Added"), 200
+
+
 
 
 @app.route("/del-node/<id>", methods=["DELETE"])
