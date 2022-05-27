@@ -1,5 +1,12 @@
 import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import Typography from "@mui/material/Typography";
+
+const selectColor = (status) => {
+  if (status === "online") return "green";
+  else if (status === "repair") return "#b28704";
+  else return "red";
+};
 
 const MapCont = (props) => {
   console.log(props);
@@ -12,6 +19,7 @@ const MapCont = (props) => {
       />
       {props.result.map((node) => {
         console.log(node._id.$oid);
+        const col = selectColor(node.status);
         return (
           <Marker
             key={node._id.$oid}
@@ -19,8 +27,16 @@ const MapCont = (props) => {
             onClick={() => {
               setActivePark(node);
             }}
+            color={col}
           >
-            <Popup></Popup>
+            <Popup>
+              <Typography color={col}>
+                Voltage = {node.volt}V<br />
+                Phase = {node.phase}
+                <br />
+                Co-ordinates = {node.location.lat} N, {node.location.long} E
+              </Typography>
+            </Popup>
           </Marker>
         );
       })}

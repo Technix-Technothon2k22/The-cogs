@@ -18,6 +18,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const drawerWidth = "30%";
 
+const selectColor = (status) => {
+  if (status === "online") return "green";
+  else if (status === "repair") return "#b28704";
+  else return "red";
+};
+
 export default function PermanentDrawerRight(props) {
   return (
     <Drawer
@@ -43,10 +49,12 @@ export default function PermanentDrawerRight(props) {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography color="red">{text.status}</Typography>
+                    <Typography color={selectColor(text.status)}>
+                      {text.status}
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography color="red">
+                    <Typography color={selectColor(text.status)}>
                       Voltage = {text.volt}V<br />
                       Phase = {text.phase}
                       <br />
