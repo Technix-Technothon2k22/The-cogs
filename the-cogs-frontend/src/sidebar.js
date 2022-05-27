@@ -30,13 +30,15 @@ export default function PermanentDrawerRight(props) {
       <Toolbar />
       <Divider />
       <List>
-        {props.result.map((text, index) => (
-          <ListItem key={text.$oid} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={text.status} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {props.result
+          .filter((item) => item.status === "offline")
+          .map((text, index) => (
+            <ListItem key={text.$oid} disablePadding>
+              <ListItemButton>
+                <ListItemText primary={text.status} />
+              </ListItemButton>
+            </ListItem>
+          ))}
       </List>
       <Divider />
       <List>
