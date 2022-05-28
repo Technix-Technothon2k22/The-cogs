@@ -15,17 +15,24 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
-    fetch("http://192.168.0.121:5001/get-data")
-      .then((res) => res.json())
-      .then((json) => {
-        this.setState(
-          {
-            nodes: json,
-            dataIsLoaded: true,
-          },
-          () => console.log("data loaded")
-        );
-      });
+    setInterval(
+      () =>
+        fetch("http://192.168.0.121:5001/get-data")
+          .then((res) => res.json())
+          .then((json) => {
+            this.setState(
+              {
+                nodes: json,
+                dataIsLoaded: true,
+              },
+              () => console.log("data loaded")
+            );
+          }),
+      10000
+    );
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
   render() {
     return (

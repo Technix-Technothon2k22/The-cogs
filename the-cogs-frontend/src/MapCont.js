@@ -41,7 +41,7 @@ const MapCont = (props) => {
       />
       {props.result.map((node) => {
         const deleteNode = () =>
-          fetch(`http://localhost:5001/del-node/${node._id.$oid}`, {
+          fetch(`http://192.168.0.121:5001/del-node/${node._id.$oid}`, {
             method: "DELETE",
           });
         const col = selectColor(node.status);

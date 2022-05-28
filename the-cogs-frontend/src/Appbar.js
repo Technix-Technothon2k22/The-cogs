@@ -57,16 +57,17 @@ export default function PrimarySearchAppBar() {
         location: { lat: formValues.latitude, long: formValues.longitude },
       }),
     };
-    fetch("http://localhost:5001/add-node", requestOptions).then((res) =>
+    fetch("http://192.168.0.121:5001/add-node", requestOptions).then((res) =>
       console.log(res)
     );
     handleClose();
+    //window.location.reload(false);
   };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
+        position="sticky"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar>
@@ -152,26 +153,6 @@ export default function PrimarySearchAppBar() {
                 </form>
               </Dialog>
             </div>
-            {/* <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
-            {/* <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton> */}
           </Box>
         </Toolbar>
       </AppBar>

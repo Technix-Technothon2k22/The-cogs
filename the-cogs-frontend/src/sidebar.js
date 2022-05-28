@@ -9,7 +9,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Grid from "@mui/material/Grid";
-import { Button } from "@mui/material";
+import { Button, Toolbar } from "@mui/material";
 
 const drawerWidth = "2  0%";
 
@@ -30,14 +30,20 @@ export default function PermanentDrawerRight(props) {
       }}
       anchor={"right"}
     >
+      <Toolbar />
       <List>
+        <Typography>Offline or malfunctioning</Typography>
         {props.result
-          .filter((item) => item.status === "offline")
+          .filter(
+            (item) =>
+              item.status === "offline" || item.volt < 220 || item.phase < 3
+          )
           .map((node, index) => {
-            const changeStatus = () =>
+            const changeStatus = () => {
               fetch(`http://localhost:5001/change-status/${node._id.$oid}`, {
                 method: "PUT",
               });
+            };
             return (
               <ListItem key={node._id.$oid} disablePadding>
                 <Accordion>
@@ -49,7 +55,7 @@ export default function PermanentDrawerRight(props) {
                     <Grid container>
                       <Grid item xs={11}>
                         <Typography color={selectColor(node.status)}>
-                          {node.status}
+                          {node.locality}
                         </Typography>
                       </Grid>
                       <Grid item xs={1}></Grid>
@@ -60,8 +66,10 @@ export default function PermanentDrawerRight(props) {
                       Voltage = {node.volt}V<br />
                       Phase = {node.phase}
                       <br />
-                      Co-ordinates = {node.location.lat} N, {node.location.long}{" "}
-                      E
+                      Co-ordinates = {node.location.lat.toFixed(4)} N,{" "}
+                      {node.location.long.toFixed(4)} E
+                      <br />
+                      Times Repaired = {node.repairCount}
                       <br />
                       <Button
                         variant="contained"
@@ -77,9 +85,14 @@ export default function PermanentDrawerRight(props) {
             );
           })}
       </List>
+      <Divider />
+      <Typography>Online</Typography>
       <List>
         {props.result
-          .filter((item) => item.status === "online")
+          .filter(
+            (item) =>
+              item.status === "online" && item.volt === 220 && item.phase === 3
+          )
           .map((node, index) => {
             return (
               <ListItem key={node._id.$oid} disablePadding>
@@ -98,8 +111,46 @@ export default function PermanentDrawerRight(props) {
                       Voltage = {node.volt}V<br />
                       Phase = {node.phase}
                       <br />
-                      Co-ordinates = {node.location.lat} N, {node.location.long}{" "}
-                      E
+                      Co-ordinates = {node.location.lat.toFixed(4)} N,{" "}
+                      {node.location.long.toFixed(4)} E
+                      <br />
+                      Times Repaired = {node.repairCount}
+                      <br />
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </ListItem>
+            );
+          })}
+      </List>
+      <Divider />
+      <Typography>Under Repair</Typography>
+      <List>
+        {props.result
+          .filter((item) => item.status === "repair")
+          .map((node, index) => {
+            return (
+              <ListItem key={node._id.$oid} disablePadding>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography color={selectColor(node.status)}>
+                      {node.locality}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography color={selectColor(node.status)}>
+                      Voltage = {node.volt}V<br />
+                      Phase = {node.phase}
+                      <br />
+                      Co-ordinates = {node.location.lat.toFixed(4)} N,{" "}
+                      {node.location.long.toFixed(4)} E
+                      <br />
+                      Times Repaired ={" "}
+                      {node.repairCount === undefined ? 0 : node.repairCount}
                       <br />
                     </Typography>
                   </AccordionDetails>
