@@ -1,6 +1,5 @@
 import React from "react";
 import Map from "./MapCont";
-import logo from "./logo.svg";
 import "./App.css";
 
 import PrimarySearchAppBar from "./Appbar";
@@ -16,7 +15,7 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
-    fetch("http://localhost:5001/get-data")
+    fetch("http://192.168.0.121:5001/get-data")
       .then((res) => res.json())
       .then((json) => {
         this.setState(

@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import Typography from "@mui/material/Typography";
+import { Typography, Button } from "@mui/material";
+
 import * as L from "leaflet";
 
 const LeafIcon = L.Icon.extend({
@@ -33,24 +33,22 @@ const selectIcon = (status) => {
 };
 
 const MapCont = (props) => {
-  console.log(props);
-  const [activePark, setActivePark] = useState(null);
   return (
-    <MapContainer center={[15.283, 73.98]} zoom={12} scrollWheelZoom={true}>
+    <MapContainer center={[15.283, 73.98]} zoom={12} scrollWheelZoom={false}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
       {props.result.map((node) => {
-        console.log(node._id.$oid);
+        const deleteNode = () =>
+          fetch(`http://localhost:5001/del-node/${node._id.$oid}`, {
+            method: "DELETE",
+          });
         const col = selectColor(node.status);
         return (
           <Marker
             key={node._id.$oid}
             position={[node.location.lat, node.location.long]}
-            onClick={() => {
-              setActivePark(node);
-            }}
             icon={selectIcon(node.status)}
           >
             <Popup>
@@ -60,6 +58,9 @@ const MapCont = (props) => {
                 <br />
                 Co-ordinates = {node.location.lat} N, {node.location.long} E
               </Typography>
+              <Button variant="contained" onClick={deleteNode}>
+                Delete
+              </Button>
             </Popup>
           </Marker>
         );
