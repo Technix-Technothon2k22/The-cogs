@@ -11,7 +11,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Grid from "@mui/material/Grid";
 import { Button, Toolbar } from "@mui/material";
 
-const drawerWidth = "2  0%";
+const drawerWidth = "16%";
 
 const selectColor = (status) => {
   if (status === "online") return "green";
@@ -20,6 +20,7 @@ const selectColor = (status) => {
 };
 
 export default function PermanentDrawerRight(props) {
+  console.log(props);
   return (
     <Drawer
       variant="permanent"
@@ -36,13 +37,17 @@ export default function PermanentDrawerRight(props) {
         {props.result
           .filter(
             (item) =>
-              item.status === "offline" || item.volt < 220 || item.phase < 3
+              (item.volt < 220 || item.phase < 3) && item.status === "offline"
           )
+
           .map((node, index) => {
             const changeStatus = () => {
-              fetch(`http://localhost:5001/change-status/${node._id.$oid}`, {
-                method: "PUT",
-              });
+              fetch(
+                `http://192.168.0.121:5001/change-status/${node._id.$oid}`,
+                {
+                  method: "PUT",
+                }
+              );
             };
             return (
               <ListItem key={node._id.$oid} disablePadding>
