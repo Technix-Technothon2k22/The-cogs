@@ -34,7 +34,9 @@ def getData():
             data.append(doc)
 
         data = json.loads(json_util.dumps(data))
-        return jsonify({"result": data}), 200
+        analys = analysis()
+
+        return jsonify({"result": data, "analysis": analys}), 200
 
 
 @app.route("/add-node", methods=["POST"])
@@ -49,6 +51,7 @@ def addNode():
         data["volt"] = 220
         data["phase"] = 3
         data["numbers"] = ["8329270368"]
+        data["repairCount"] = 0
         collection.insert_one(data)
 
         return jsonify("Added"), 200
@@ -71,8 +74,11 @@ def delNode(id):
 @app.route("/change-status/<id>", methods=["PUT"])
 def changeStatus(id):
     if request.method == "PUT":
+        count = int(collection.find_one(
+            {"_id": ObjectId(id)})["repairCount"])+1
+        print(count)
         collection.find_one_and_update(
-            {"_id": ObjectId(id)}, {"$set": {"status": "repair"}}, upsert=True)
+            {"_id": ObjectId(id)}, {"$set": {"status": "repair", "repairCount": count}}, upsert=True)
         node = collection.find_one({"_id": ObjectId(id)})
         nums = node["numbers"]
 
@@ -83,6 +89,28 @@ def changeStatus(id):
                 to='+91{}'.format(str(num))
             )
         return jsonify("Repair on"), 200
+
+
+@app.route("/node-ping/<id>", methods=["PUT"])
+def nodePing(id):
+    if request.method == "PUT":
+        data = request.get_json()
+        collection.find_one_and_update({"_id": ObjectId(id)}, {
+                                       "$set": data}, upsert=True)
+
+        return jsonify("Ping registered"), 200
+
+
+# @app.route("/analysis", methods=["GET"])
+def analysis():
+    cursor = collection.find({"repairCount": {"$gte": 5}})
+
+    data = []
+    for node in cursor:
+        data.append(node)
+
+    data = json.loads(json_util.dumps(data))
+    return data
 
 
 if __name__ == "__main__":
