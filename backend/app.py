@@ -4,10 +4,18 @@ from pymongo import MongoClient
 from bson import json_util
 from bson.objectid import ObjectId
 from flask_cors import CORS
+from decouple import config
+from twilio.rest import Client
 
+account_sid = config('TWILIO_ACCOUNT_SID')
+auth_token = config('TWILIO_AUTH_TOKEN')
 
-client = MongoClient(
-    "mongodb+srv://amit:YA1dZkURFHFbrY2r@cluster0.3ahw9wr.mongodb.net/?retryWrites=true&w=majority")
+smsClient = Client(account_sid, auth_token)
+
+uri = "mongodb+srv://{}:{}@cluster0.3ahw9wr.mongodb.net/?retryWrites=true&w=majority".format(
+    config("DB_USERNAME"), config("DB_PASSWORD"))
+
+client = MongoClient(uri)
 
 database = client.elecnodes
 collection = database.nodes
@@ -40,7 +48,7 @@ def addNode():
         data["status"] = "online"
         data["volt"] = 220
         data["phase"] = 3
-
+        data["numbers"] = ["8329270368"]
         collection.insert_one(data)
 
         return jsonify("Added"), 200
@@ -65,6 +73,15 @@ def changeStatus(id):
     if request.method == "PUT":
         collection.find_one_and_update(
             {"_id": ObjectId(id)}, {"$set": {"status": "repair"}}, upsert=True)
+        node = collection.find_one({"_id": ObjectId(id)})
+        nums = node["numbers"]
+
+        for num in nums:
+            message = smsClient.messages.create(
+                body='Your electricity node is under repair, you may face loss of electricity. We are sorry for the inconvenience.',
+                from_='+19784812080',
+                to='+91{}'.format(str(num))
+            )
         return jsonify("Repair on"), 200
 
 
