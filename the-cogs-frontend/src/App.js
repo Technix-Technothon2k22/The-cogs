@@ -1,6 +1,5 @@
 import React from "react";
 import Map from "./MapCont";
-import logo from "./logo.svg";
 import "./App.css";
 
 import PrimarySearchAppBar from "./Appbar";

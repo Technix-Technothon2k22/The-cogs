@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Typography, Button } from "@mui/material";
 
@@ -34,7 +33,6 @@ const selectIcon = (status) => {
 };
 
 const MapCont = (props) => {
-  const [activePark, setActivePark] = useState(null);
   return (
     <MapContainer center={[15.283, 73.98]} zoom={12} scrollWheelZoom={false}>
       <TileLayer
