@@ -99,7 +99,7 @@ export default function PrimarySearchAppBar(props) {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            ELECTRO_NODE
+            Electro-Node
           </Typography>
           {/* <Search>
             <SearchIconWrapper>
@@ -181,7 +181,7 @@ export default function PrimarySearchAppBar(props) {
             color="success"
             onClick={handleAssessmentClickOpen}
           >
-            Assessment
+            Analysis
           </Button>
           <Modal
             open={openAssessment}
