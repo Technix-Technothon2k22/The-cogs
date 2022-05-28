@@ -191,7 +191,7 @@ export default function PrimarySearchAppBar(props) {
           >
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                Repair Analyis
+                Repair Analysis
               </Typography>
               <Typography
                 id="modal-modal-description"
