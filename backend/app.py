@@ -34,7 +34,9 @@ def getData():
             data.append(doc)
 
         data = json.loads(json_util.dumps(data))
-        return jsonify({"result": data}), 200
+        analys = analysis()
+
+        return jsonify({"result": data, "analysis": analys}), 200
 
 
 @app.route("/add-node", methods=["POST"])
@@ -99,17 +101,16 @@ def nodePing(id):
         return jsonify("Ping registered"), 200
 
 
-@app.route("/analysis", methods=["GET"])
+# @app.route("/analysis", methods=["GET"])
 def analysis():
-    if request.method == "GET":
-        cursor = collection.find({"repairCount": {"$gte": 5}})
+    cursor = collection.find({"repairCount": {"$gte": 5}})
 
-        data = []
-        for node in cursor:
-            data.append(node)
+    data = []
+    for node in cursor:
+        data.append(node)
 
-        data = json.loads(json_util.dumps(data))
-        return jsonify({"result": data}), 200
+    data = json.loads(json_util.dumps(data))
+    return data
 
 
 if __name__ == "__main__":
