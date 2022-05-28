@@ -13,9 +13,25 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Modal from "@mui/material/Modal";
+import { Divider } from "@mui/material";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
-export default function PrimarySearchAppBar() {
-  const [open, setOpen] = React.useState(false);
+export default function PrimarySearchAppBar(props) {
+  console.log(props.analysis);
+  const [openAddNode, setAddNodeOpen] = React.useState(false);
+  const [openAssessment, setAssessmentOpen] = React.useState(false);
+
   const [formValues, setFormValues] = React.useState({
     location: "",
     longitude: 0,
@@ -29,12 +45,19 @@ export default function PrimarySearchAppBar() {
       [name]: value,
     });
   };
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleNodeAddClickOpen = () => {
+    setAddNodeOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleNodeAddClose = () => {
+    setAddNodeOpen(false);
+  };
+  const handleAssessmentClickOpen = () => {
+    setAssessmentOpen(true);
+  };
+
+  const handleAssessmentClose = () => {
+    setAssessmentOpen(false);
   };
 
   const handleSubmit = (e) => {
@@ -50,7 +73,6 @@ export default function PrimarySearchAppBar() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: JSON.stringify({
         locality: formValues.location,
@@ -60,7 +82,7 @@ export default function PrimarySearchAppBar() {
     fetch("http://192.168.0.121:5001/add-node", requestOptions).then((res) =>
       console.log(res)
     );
-    handleClose();
+    handleNodeAddClose();
     //window.location.reload(false);
   };
 
@@ -94,17 +116,17 @@ export default function PrimarySearchAppBar() {
               size="large"
               aria-label="add new node"
               color="inherit"
-              onClick={handleClickOpen}
+              onClick={handleNodeAddClickOpen}
             >
               <AddIcon />
             </IconButton>
             <div>
-              <Button variant="outlined" onClick={handleClickOpen}>
+              <Button variant="outlined" onClick={handleNodeAddClickOpen}>
                 Open form dialog
               </Button>
-              <Dialog open={open} onClose={handleClose}>
+              <Dialog open={openAddNode} onClose={handleNodeAddClose}>
                 <form onSubmit={handleSubmit}>
-                  <DialogTitle>Subscribe</DialogTitle>
+                  <DialogTitle>New Node</DialogTitle>
 
                   <DialogContent>
                     <DialogContentText>
@@ -147,13 +169,50 @@ export default function PrimarySearchAppBar() {
                   </DialogContent>
 
                   <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleNodeAddClose}>Cancel</Button>
                     <Button type="submit">Subscribe</Button>
                   </DialogActions>
                 </form>
               </Dialog>
             </div>
           </Box>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleAssessmentClickOpen}
+          >
+            Assessment
+          </Button>
+          <Modal
+            open={openAssessment}
+            onClose={handleAssessmentClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Repair Analyis
+              </Typography>
+              <Typography
+                id="modal-modal-description"
+                variant="body1"
+                component="p"
+              >
+                The Nodes which have the most downtime are
+              </Typography>
+
+              {props.analysis.map((node) => (
+                <>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    Location: {node.locality}
+                    <br />
+                    Repair Count: {node.repairCount}
+                  </Typography>
+                  <Divider />
+                </>
+              ))}
+            </Box>
+          </Modal>
         </Toolbar>
       </AppBar>
     </Box>
